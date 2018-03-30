@@ -19,9 +19,13 @@ import javafx.scene.text.Text;
 
 public class WeatherView {
 
+	private Text titre;
+	private Text statut;
+	private Text temperature;
+	private ImageView icon;
+
 	private Scene scene;
 	private GeneralControler generalControler;
-
 	private BorderPane root;
 
 	public WeatherView() {
@@ -35,6 +39,8 @@ public class WeatherView {
 		root.setTop(getPaneTop());
 		root.setCenter(getPaneCenter());
 		root.setBottom(getPaneBottom());
+
+		updateAll();
 	}
 
 	private ImageView getIcon(String resourcePath) {
@@ -46,18 +52,26 @@ public class WeatherView {
 		return iv;
 	}
 
-	public Pane getPaneTop() {
+	private Pane getPaneTop() {
 		BorderPane top = new BorderPane();
 		top.setPadding(new Insets(10, 10, 10, 10));
 
 		// Left part
 		MenuItem localisation = new MenuItem("Localisation", this.getIcon("/earth.png"));
+		localisation.setOnAction(event -> {
+			generalControler.changeLocationClick();
+			updateAll();
+		});
+		MenuItem options = new MenuItem("Options",null);
+		options.setOnAction(event -> {
+			
+		});
 		MenuButton menuButton = new MenuButton("", this.getIcon("/menu.png"), localisation);
 
 		top.setLeft(menuButton);
 
 		// Center Part
-		Text titre = new Text("Météo " + generalControler.getCity());
+		titre = new Text();
 		titre.setFont(new Font("Verdana", 20));
 
 		top.setCenter(titre);
@@ -70,30 +84,36 @@ public class WeatherView {
 		return top;
 	}
 
-	public Pane getPaneCenter() {
+	private Pane getPaneCenter() {
 		GridPane center = new GridPane();
 		center.setAlignment(Pos.CENTER);
-		
-		
-		Text statut = new Text(generalControler.getWheather());
-		statut.setFont(new Font("Verdana",18));
-		Text temperature = new Text(generalControler.getTemperatureC() + "°C" + " / " + generalControler.getTemperatureF() + "°F");
-		temperature.setFont(new Font("Verdana",18));
-		
-		Image img = new Image(generalControler.getIconUrl());
-		ImageView icon = new ImageView(img);
+
+		statut = new Text();
+		statut.setFont(new Font("Verdana", 18));
+		temperature = new Text();
+		temperature.setFont(new Font("Verdana", 18));
+
+		icon = new ImageView(new Image(generalControler.getIconUrl()));
 		icon.setFitHeight(100);
 		icon.setFitWidth(100);
-		
+
 		center.add(statut, 1, 0);
-		center.add(temperature,1,1);
+		center.add(temperature, 1, 1);
 		center.add(icon, 1, 2);
-		
+
 		return center;
 	}
 
-	public Pane getPaneBottom() {
+	private Pane getPaneBottom() {
 		return new Pane();
+	}
+
+	private void updateAll() {
+		titre.setText("Météo " + generalControler.getCity());
+		statut.setText(generalControler.getWheather());
+		temperature
+				.setText(generalControler.getTemperatureC() + "°C" + " / " + generalControler.getTemperatureF() + "°F");
+		icon.setImage(new Image(generalControler.getIconUrl()));
 	}
 
 	public Scene getScene() {

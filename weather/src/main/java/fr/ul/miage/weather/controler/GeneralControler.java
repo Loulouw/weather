@@ -1,5 +1,6 @@
 package fr.ul.miage.weather.controler;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
@@ -9,6 +10,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import fr.ul.miage.weather.util.JSONResponse;
+import fr.ul.miage.weather.view.DialogLocationView;
+import javafx.scene.control.Dialog;
+import javafx.util.Pair;
 
 public class GeneralControler {
 
@@ -47,28 +51,45 @@ public class GeneralControler {
 		return gson.fromJson(s, JSONResponse.class);
 	}
 
+	public void changeLocationClick() {
+		Optional<Pair<String, String>> result = DialogLocationView.getDialog().showAndWait();
+		result.ifPresent(paysVille -> {
+			JSONResponse json = getConditions(paysVille.getKey(), paysVille.getValue());
+			if (json != null) {
+				reponse = json;
+			}
+		});
+	}
+
+	private String testNull(String entree) {
+		if (entree == null) {
+			return "ND";
+		}
+		return entree;
+	}
+
 	public void setNewLocation(String country, String city) {
 		reponse = getConditions(country, city);
 	}
 
 	public String getCity() {
-		return reponse.getCurrentObservation().getDisplayLocation().getCity();
+		return testNull(reponse.getCurrentObservation().getDisplayLocation().getCity());
 	}
 
-	public float getTemperatureC() {
-		return reponse.getCurrentObservation().getTempC();
+	public String getTemperatureC() {
+		return reponse.getCurrentObservation().getTempC() + "";
 	}
 
-	public float getTemperatureF() {
-		return reponse.getCurrentObservation().getTempF();
+	public String getTemperatureF() {
+		return reponse.getCurrentObservation().getTempF() + "";
 	}
 
 	public String getWheather() {
-		return reponse.getCurrentObservation().getWeather();
+		return testNull(reponse.getCurrentObservation().getWeather());
 	}
 
 	public String getIconUrl() {
-		return reponse.getCurrentObservation().getIconUrl();
+		return testNull(reponse.getCurrentObservation().getIconUrl());
 	}
 
 }

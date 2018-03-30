@@ -53,10 +53,10 @@ public class CurrentObservation {
     private String temperatureString;
     @SerializedName("temp_f")
     @Expose
-    private int tempF;
+    private double tempF;
     @SerializedName("temp_c")
     @Expose
-    private int tempC;
+    private double tempC;
     @SerializedName("relative_humidity")
     @Expose
     private String relativeHumidity;
@@ -71,16 +71,16 @@ public class CurrentObservation {
     private int windDegrees;
     @SerializedName("wind_mph")
     @Expose
-    private int windMph;
+    private double windMph;
     @SerializedName("wind_gust_mph")
     @Expose
-    private int windGustMph;
+    private double windGustMph;
     @SerializedName("wind_kph")
     @Expose
-    private int windKph;
+    private double windKph;
     @SerializedName("wind_gust_kph")
     @Expose
-    private int windGustKph;
+    private double windGustKph;
     @SerializedName("pressure_mb")
     @Expose
     private String pressureMb;
@@ -295,15 +295,15 @@ public class CurrentObservation {
         this.temperatureString = temperatureString;
     }
 
-    public int getTempF() {
+    public double getTempF() {
         return tempF;
     }
 
-    public void setTempF(int tempF) {
+    public void setTempF(double tempF) {
         this.tempF = tempF;
     }
 
-    public int getTempC() {
+    public double getTempC() {
         return tempC;
     }
 
@@ -343,35 +343,35 @@ public class CurrentObservation {
         this.windDegrees = windDegrees;
     }
 
-    public int getWindMph() {
+    public double getWindMph() {
         return windMph;
     }
 
-    public void setWindMph(int windMph) {
+    public void setWindMph(double windMph) {
         this.windMph = windMph;
     }
 
-    public int getWindGustMph() {
+    public double getWindGustMph() {
         return windGustMph;
     }
 
-    public void setWindGustMph(int windGustMph) {
+    public void setWindGustMph(double windGustMph) {
         this.windGustMph = windGustMph;
     }
 
-    public int getWindKph() {
+    public double getWindKph() {
         return windKph;
     }
 
-    public void setWindKph(int windKph) {
+    public void setWindKph(double windKph) {
         this.windKph = windKph;
     }
 
-    public int getWindGustKph() {
+    public double getWindGustKph() {
         return windGustKph;
     }
 
-    public void setWindGustKph(int windGustKph) {
+    public void setWindGustKph(double windGustKph) {
         this.windGustKph = windGustKph;
     }
 
