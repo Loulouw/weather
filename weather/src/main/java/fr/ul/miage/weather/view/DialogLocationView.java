@@ -40,7 +40,7 @@ public class DialogLocationView {
 		grid.setHgap(10);
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 150, 10, 10));
-
+		
 		TextField pays = new TextField();
 		pays.setPromptText("Pays");
 		TextField ville = new TextField();

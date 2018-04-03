@@ -3,7 +3,7 @@ package fr.ul.miage.weather;
 import javafx.application.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
+import fr.ul.miage.weather.controler.GeneralControler;
 import fr.ul.miage.weather.view.WeatherView;
 
 public class App extends Application {

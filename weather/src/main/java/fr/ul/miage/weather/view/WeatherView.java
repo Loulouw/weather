@@ -1,7 +1,10 @@
 package fr.ul.miage.weather.view;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import fr.ul.miage.weather.App;
 import fr.ul.miage.weather.controler.GeneralControler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -23,22 +27,28 @@ public class WeatherView {
 	private Text statut;
 	private Text temperature;
 	private ImageView icon;
+	private Text vent;
+	private Text dateHeure;
 
 	private Scene scene;
 	private GeneralControler generalControler;
 	private BorderPane root;
 
 	public WeatherView() {
-		generalControler = new GeneralControler();
+		generalControler = GeneralControler.getControler(this);
 
 		root = new BorderPane();
 		root.setStyle(Style.ROOT);
 
-		scene = new Scene(root, 400, 500, Color.WHITE);
+		scene = new Scene(root, 300, 300, Color.WHITE);
 
 		root.setTop(getPaneTop());
 		root.setCenter(getPaneCenter());
 		root.setBottom(getPaneBottom());
+
+		App.stage.setOnCloseRequest(event -> {
+			generalControler.stopUpdateSystem();
+		});
 
 		updateAll();
 	}
@@ -62,11 +72,12 @@ public class WeatherView {
 			generalControler.changeLocationClick();
 			updateAll();
 		});
-		MenuItem options = new MenuItem("Options",null);
+		MenuItem options = new MenuItem("Options", this.getIcon("/cog.png"));
 		options.setOnAction(event -> {
-			
+			OptionsView.getOptionsView(this).getStage().show();
+			OptionsView.getOptionsView(this).getStage().requestFocus();
 		});
-		MenuButton menuButton = new MenuButton("", this.getIcon("/menu.png"), localisation);
+		MenuButton menuButton = new MenuButton("", this.getIcon("/menu.png"), localisation, options);
 
 		top.setLeft(menuButton);
 
@@ -97,23 +108,34 @@ public class WeatherView {
 		icon.setFitHeight(100);
 		icon.setFitWidth(100);
 
+		vent = new Text();
+		vent.setFont(new Font("Verdana", 16));
+
+		center.add(icon, 0, 0, 1, 2);
 		center.add(statut, 1, 0);
 		center.add(temperature, 1, 1);
-		center.add(icon, 1, 2);
+		center.add(vent, 0, 2, 2, 1);
 
 		return center;
 	}
 
 	private Pane getPaneBottom() {
-		return new Pane();
+		BorderPane bp = new BorderPane();
+
+		dateHeure = new Text();
+		dateHeure.setFont(new Font("Verdana", 15));
+		bp.setCenter(dateHeure);
+
+		return bp;
 	}
 
-	private void updateAll() {
+	public void updateAll() {
 		titre.setText("Météo " + generalControler.getCity());
 		statut.setText(generalControler.getWheather());
-		temperature
-				.setText(generalControler.getTemperatureC() + "°C" + " / " + generalControler.getTemperatureF() + "°F");
+		temperature.setText(generalControler.getTemperature());
 		icon.setImage(new Image(generalControler.getIconUrl()));
+		vent.setText("Direction vent : " + generalControler.getWindDir() + " " + generalControler.getWindSpeed());
+		dateHeure.setText(new SimpleDateFormat("dd/MM/yyyy  -  HH:mm:ss").format(new Date()));
 	}
 
 	public Scene getScene() {
